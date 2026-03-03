@@ -3933,7 +3933,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
 
   setStep(savedStep, false);
-  history.replaceState({ step: savedStep }, "", location.pathname);
+  history.replaceState({ step: savedStep }, "", location.pathname + location.search);
 
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
