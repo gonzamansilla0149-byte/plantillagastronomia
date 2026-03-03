@@ -1,9 +1,9 @@
 async function loadStoreConfig() {
 
-  const params = new URLSearchParams(window.location.search);
-  const storeId = params.get("store") || "default";
+  // 🔥 LEER STORE DESDE LA URL (path)
+  const pathParts = window.location.pathname.split("/");
+  const storeId = pathParts[pathParts.length - 1] || "default";
 
-  // 🔥 MOCK MULTI STORE
   const stores = {
     default: {
       name: "Plantilla Gastronomía",
