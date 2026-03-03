@@ -1,69 +1,68 @@
 async function loadStoreConfig() {
 
   const params = new URLSearchParams(window.location.search);
-  const storeId = params.get("store") || "default";
+  const slug = params.get("store");
 
-  const stores = {
-    default: {
-      name: "Plantilla Gastronomía",
-      accentColor: "#D3AE09",
-      instagramHandle: "@plantilla.demo",
-      instagramUrl: "https://instagram.com",
+  if (!slug) {
+    console.warn("No store slug provided");
+    return;
+  }
 
-      // 🔥 Flags futuras
-      showInfoOperativa: true,
-      showReassurance: true
-    },
+  try {
 
-    sabores: {
-      name: "Sabores del Fogón",
-      accentColor: "#D3AE09",
-      instagramHandle: "@saboresfogon.ar",
-      instagramUrl: "https://instagram.com/saboresfogon.ar",
+    const response = await fetch(
+      `https://creatutienda.gonzamansilla0149.workers.dev/api/store/${slug}`
+    );
 
-      showInfoOperativa: true,
-      showReassurance: true
-    },
-
-    mitienda: {
-      name: "Mi Nueva Tienda",
-      accentColor: "#ff3b3b",
-      instagramHandle: "@mitienda",
-      instagramUrl: "https://instagram.com/mitienda",
-
-      showInfoOperativa: false,
-      showReassurance: false
+    if (!response.ok) {
+      throw new Error("Store not found");
     }
-  };
 
-  const config = stores[storeId] || stores["default"];
+    const config = await response.json();
 
-  // 🔥 Guardamos globalmente para que el motor lo pueda usar
-  window.STORE_CONFIG = config;
+    // Guardamos global
+    window.STORE_CONFIG = config;
 
-  applyStoreConfig(config);
+    applyStoreConfig(config);
+
+  } catch (error) {
+    console.error("Error loading store config:", error);
+  }
 }
 
 function applyStoreConfig(config) {
 
-  document.title = config.name;
+  document.title = config.name || "Tienda";
 
   const mainTitle = document.querySelector(".landing-intro-top h1");
   if (mainTitle) {
-    mainTitle.innerText = config.name;
+    mainTitle.innerText = config.name || "";
   }
 
-  document.documentElement
-    .style
-    .setProperty("--accent", config.accentColor);
+  if (config.accentColor) {
+    document.documentElement
+      .style
+      .setProperty("--accent", config.accentColor);
+  }
 
   const instaLink = document.querySelector(".mini-banner .left a");
-  if (instaLink) {
+  if (instaLink && config.instagramUrl) {
     instaLink.href = config.instagramUrl;
     instaLink.innerHTML = `
       <img src="images/LOGO.webp" class="logo">
-      ${config.instagramHandle}
+      ${config.instagramHandle || ""}
     `;
+  }
+
+  // 🔥 Flags dinámicos futuros
+  if (config.showInfoOperativa === false) {
+    const section = document.querySelector(".info-operativa");
+    if (section) section.style.display = "none";
+  }
+
+  if (config.showReassurance === false) {
+    const section = document.querySelector(".reassurance");
+    if (section) section.style.display = "none";
   }
 }
 
