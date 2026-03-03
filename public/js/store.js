@@ -1,5 +1,7 @@
 async function loadStoreConfig() {
 
+  console.log("STORE SCRIPT RUNNING");
+
   // 🔥 MOCK TEMPORAL
   const config = {
     name: "Mi Nueva Tienda",
@@ -11,29 +13,23 @@ async function loadStoreConfig() {
   applyStoreConfig(config);
 }
 
-  const res = await fetch(`https://TU-WORKER-CORE/api/store/${storeId}`);
-  const config = await res.json();
-
-  applyStoreConfig(config);
-}
-
 function applyStoreConfig(config) {
 
   // Título navegador
   document.title = config.name;
 
-  // Título principal si existe
+  // Cambiar título principal
   const mainTitle = document.querySelector(".landing-intro-top h1");
   if (mainTitle) {
     mainTitle.innerText = config.name;
   }
 
-  // Color principal
+  // Cambiar color principal
   document.documentElement
     .style
     .setProperty("--accent", config.accentColor);
 
-  // Instagram
+  // Cambiar Instagram
   const instaLink = document.querySelector(".mini-banner .left a");
   if (instaLink) {
     instaLink.href = config.instagramUrl;
