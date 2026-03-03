@@ -1,11 +1,15 @@
 async function loadStoreConfig() {
-  const params = new URLSearchParams(window.location.search);
-  const storeId = params.get("store");
 
-  if (!storeId) {
-    console.warn("No storeId provided");
-    return;
-  }
+  // 🔥 MOCK TEMPORAL
+  const config = {
+    name: "Mi Nueva Tienda",
+    accentColor: "#ff3b3b",
+    instagramHandle: "@mitienda",
+    instagramUrl: "https://instagram.com/mitienda"
+  };
+
+  applyStoreConfig(config);
+}
 
   const res = await fetch(`https://TU-WORKER-CORE/api/store/${storeId}`);
   const config = await res.json();
@@ -14,16 +18,26 @@ async function loadStoreConfig() {
 }
 
 function applyStoreConfig(config) {
+
+  // Título navegador
   document.title = config.name;
 
+  // Título principal si existe
+  const mainTitle = document.querySelector(".landing-intro-top h1");
+  if (mainTitle) {
+    mainTitle.innerText = config.name;
+  }
+
+  // Color principal
   document.documentElement
     .style
     .setProperty("--accent", config.accentColor);
 
-  const insta = document.querySelector(".mini-banner .left a");
-  if (insta) {
-    insta.href = config.instagramUrl;
-    insta.innerHTML = `
+  // Instagram
+  const instaLink = document.querySelector(".mini-banner .left a");
+  if (instaLink) {
+    instaLink.href = config.instagramUrl;
+    instaLink.innerHTML = `
       <img src="images/LOGO.webp" class="logo">
       ${config.instagramHandle}
     `;
