@@ -1,8 +1,7 @@
 async function loadStoreConfig() {
 
-  // 🔥 LEER STORE DESDE LA URL (path)
-  const pathParts = window.location.pathname.split("/");
-  const storeId = pathParts[pathParts.length - 1] || "default";
+  const params = new URLSearchParams(window.location.search);
+  const storeId = params.get("store") || "default";
 
   const stores = {
     default: {
@@ -27,6 +26,9 @@ async function loadStoreConfig() {
     }
   };
 
+  const config = stores[storeId] || stores["default"];
+  applyStoreConfig(config);
+}
   const config = stores[storeId] || stores["default"];
 
   applyStoreConfig(config);
