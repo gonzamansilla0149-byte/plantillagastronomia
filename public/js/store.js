@@ -8,49 +8,55 @@ async function loadStoreConfig() {
       name: "Plantilla Gastronomía",
       accentColor: "#D3AE09",
       instagramHandle: "@plantilla.demo",
-      instagramUrl: "https://instagram.com"
+      instagramUrl: "https://instagram.com",
+
+      // 🔥 Flags futuras
+      showInfoOperativa: true,
+      showReassurance: true
     },
 
     sabores: {
       name: "Sabores del Fogón",
       accentColor: "#D3AE09",
       instagramHandle: "@saboresfogon.ar",
-      instagramUrl: "https://instagram.com/saboresfogon.ar"
+      instagramUrl: "https://instagram.com/saboresfogon.ar",
+
+      showInfoOperativa: true,
+      showReassurance: true
     },
 
     mitienda: {
       name: "Mi Nueva Tienda",
       accentColor: "#ff3b3b",
       instagramHandle: "@mitienda",
-      instagramUrl: "https://instagram.com/mitienda"
+      instagramUrl: "https://instagram.com/mitienda",
+
+      showInfoOperativa: false,
+      showReassurance: false
     }
   };
 
   const config = stores[storeId] || stores["default"];
-  applyStoreConfig(config);
-}
-  const config = stores[storeId] || stores["default"];
+
+  // 🔥 Guardamos globalmente para que el motor lo pueda usar
+  window.STORE_CONFIG = config;
 
   applyStoreConfig(config);
 }
 
 function applyStoreConfig(config) {
 
-  // Título navegador
   document.title = config.name;
 
-  // H1 principal
   const mainTitle = document.querySelector(".landing-intro-top h1");
   if (mainTitle) {
     mainTitle.innerText = config.name;
   }
 
-  // Color principal dinámico
   document.documentElement
     .style
     .setProperty("--accent", config.accentColor);
 
-  // Instagram
   const instaLink = document.querySelector(".mini-banner .left a");
   if (instaLink) {
     instaLink.href = config.instagramUrl;
